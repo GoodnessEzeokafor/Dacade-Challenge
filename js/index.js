@@ -37,9 +37,9 @@ contract ToDoManager =
     
 */
 
-const CONTRACTADDRESS = 'ct_UDebhCQp8j3PUxgBfDmo2qoTuNA686CKV41o4zpsFkz69cbLx'; //contract addressed deployed
+const CONTRACTADDRESS = 'ct_2uYadGaJY5RyiapU3ALdm2frQtDeqgYdHk4CCMyNiZn59p5NFt'; //contract addressed deployed
 const CONTRACTSOURCE = `
-contract ToDoManager =
+contract Bucketlist =
   record state = {
     index_counter : int,
     bucketlist : map(int, string),
@@ -76,7 +76,6 @@ contract ToDoManager =
       
   public function get_bucket_list_length() : int = 
     state.index_counter
-
   `; // sophia code
 
 var client = null; // client
