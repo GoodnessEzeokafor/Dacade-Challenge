@@ -38,43 +38,44 @@ contract ToDoManager =
 */
 
 const CONTRACTADDRESS = 'ct_UDebhCQp8j3PUxgBfDmo2qoTuNA686CKV41o4zpsFkz69cbLx'; //contract addressed deployed
-const CONTRACTSOURCE = `contract ToDoManager =
-record state = {
-  index_counter : int,
-  bucketlist : map(int, string),
-  completed : map(int, bool) }
-  
-
-public stateful function init() =
-  { index_counter = 0,
-    bucketlist = {},
-    completed = {}}
-
-public function get_task_count() : int = 
-  state.index_counter
-
-public stateful function add_new_bucketlist(_newbucketlist : string) : string =
-  put(state{bucketlist[state.index_counter] = _newbucketlist })
-  put(state{completed[state.index_counter] = false})
-  put(state{index_counter = state.index_counter + 1})
-  _newbucketlist
-
-public stateful function complete_bucketlist(_index : int) : bool =
-  put(state{completed[_index] = true })
-  true
-
-public function get_bucketlist_by_index(_index:int) : string =
-  switch(Map.lookup(_index, state.bucketlist))
-    None => ""
-    Some(x) => x
+const CONTRACTSOURCE = `
+contract ToDoManager =
+  record state = {
+    index_counter : int,
+    bucketlist : map(int, string),
+    completed : map(int, bool) }
     
-public function bucketlist_is_completed(_index : int) : bool =
-  switch(Map.lookup(_index, state.completed))
-    None => false
-    Some(x) => x
-    
-public function get_bucket_list_length() : int = 
-  state.index_counter
+
+  public stateful function init() =
+    { index_counter = 0,
+      bucketlist = {},
+      completed = {}}
+
+  public function get_task_count() : int = 
+    state.index_counter
+
+  public stateful function add_new_bucketlist(_newbucketlist : string) : string =
+    put(state{bucketlist[state.index_counter] = _newbucketlist })
+    put(state{completed[state.index_counter] = false})
+    put(state{index_counter = state.index_counter + 1})
+    _newbucketlist
+
+  public stateful function complete_bucketlist(_index : int) : bool =
+    put(state{completed[_index] = true })
+    true
+
+  public function get_bucketlist_by_index(_index:int) : string =
+    switch(Map.lookup(_index, state.bucketlist))
+      None => ""
+      Some(x) => x
+      
+  public function bucketlist_is_completed(_index : int) : bool =
+    switch(Map.lookup(_index, state.completed))
+      None => false
+      Some(x) => x
+      
+  public function get_bucket_list_length() : int = 
+    state.index_counter
 
   `; // sophia code
 
@@ -99,18 +100,15 @@ window.addEventListener('load', async() => {
   bucketlistLength = await callStatic('get_bucket_list_length',[]);
   console.log(bucketlistLength);
 
-  // for(let i = 1; i <= bucketlistLength; i++){
-  //   const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
-  //   bucketlistArr.push({
-  //     index_counter:getbucketlist.index_counter,
-  //     bucketlist:getbucketlist.bucketlist,
-  //     completed:getbucketlist.completed
-  //   })
-  // }
-
-  // console.log(contract);
-
-  // renderBucketList();
+  for(let i = 1; i <= bucketlistLength; i++){
+    const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
+    bucketlistArr.push({
+      index_counter:getbucketlist.index_counter,
+      bucketlist:getbucketlist.bucketlist,
+      completed:getbucketlist.completed
+    })
+  }
+  renderBucketList();
 });
 
 
