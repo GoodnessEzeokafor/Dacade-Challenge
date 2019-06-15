@@ -37,7 +37,7 @@ contract ToDoManager =
     
 */
 
-const CONTRACTADDRESS = 'ct_2urHKYG17abXFvLw4StnS6L6AV592p9pRtDc63uyzsFuibvQDJ'; //contract addressed deployed
+const CONTRACTADDRESS = 'ct_UDebhCQp8j3PUxgBfDmo2qoTuNA686CKV41o4zpsFkz69cbLx'; //contract addressed deployed
 const CONTRACTSOURCE = `contract ToDoManager =
 record state = {
   index_counter : int,
@@ -97,7 +97,7 @@ window.addEventListener('load', async() => {
   client = await Ae.Aepp(); // ae object
 
   bucketlistLength = await callStatic('get_bucket_list_length',[]);
-  
+
   for(let i = 1; i <= bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
