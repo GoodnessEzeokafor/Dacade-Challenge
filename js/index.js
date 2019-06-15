@@ -72,20 +72,41 @@ public function bucketlist_is_completed(_index : int) : bool =
   switch(Map.lookup(_index, state.completed))
     None => false
     Some(x) => x
-`; // sophia code
+    
+public function get_bucket_list_length() : int = 
+  state.index_counter
+
+  `; // sophia code
 
 var client = null; // client
 var bucketlistArr = [];  // an empty array
 var bucketlistLength  = 0; 
 
 
+//helper function
+async function callStatic(func, args){
+  const contract = await client.getContractInstance(CONTRACTSOURCE, {CONTRACTADDRESS});
+  const calledGet = await contract.call(func, args, {callStatic:true}).catch(e => console.error(e));
+  const decodedGet = await calledGet.decoded().catch(e => console.error(e));
+
+  return decodedGet;
+}
 
 // loader 
 window.addEventListener('load', async() => {
   client = await Ae.Aepp(); // ae object
 
-  //
-  const contract = await client.getCnotractInstance(CONTRACTSOURCE, {CONTRACTADDRESS});
+  bucketlistLength = await callStatic('get_bucket_list_length',[]);
+  
+  for(let i = 1; i <= bucketlistLength; i++){
+    const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
+    bucketlistArr.push({
+      index_counter:getbucketlist.index_counter,
+      bucketlist:getbucketlist.bucketlist,
+      completed:getbucketlist.completed
+    })
+  }
+
   // console.log(contract);
 
   renderMockArray();
