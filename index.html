@@ -54,16 +54,16 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- Begin Mustache Script -->
     <script id="template" type="x-tmpl-mustache">
-      {{#mockArray}}
+      {{#bucketlistArr}}
         <div class="card w-75 mt-3">
             <div class="card-body" id = {{ index_counter }}>
-              <h5 class="card-title">{{ bucket_list }}</h5>
+              <h5 class="card-title">{{ bucketlist }}</h5>
               <p class="card-text">Goodluck on this!!!</p>
               <a href="#" class="btn btn-danger mr-4">Completed</a>
-              Achieved {{ Done }}
+              Achieved {{ completed }}
               </div>
             </div>                              
-      {{/mockArray }}
+      {{/bucketlistArr }}
     </script>
     <!-- End Mustache Script -->
     <script src="js/jquery.min.js"></script>

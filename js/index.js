@@ -97,20 +97,29 @@ window.addEventListener('load', async() => {
   client = await Ae.Aepp(); // ae object
 
   bucketlistLength = await callStatic('get_bucket_list_length',[]);
+  console.log(bucketlistLength);
 
-  for(let i = 1; i <= bucketlistLength; i++){
-    const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
-    bucketlistArr.push({
-      index_counter:getbucketlist.index_counter,
-      bucketlist:getbucketlist.bucketlist,
-      completed:getbucketlist.completed
-    })
-  }
+  // for(let i = 1; i <= bucketlistLength; i++){
+  //   const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
+  //   bucketlistArr.push({
+  //     index_counter:getbucketlist.index_counter,
+  //     bucketlist:getbucketlist.bucketlist,
+  //     completed:getbucketlist.completed
+  //   })
+  // }
 
   // console.log(contract);
 
-  renderMockArray();
+  // renderBucketList();
 });
+
+
+function renderBucketList(){
+  var template = $("#template").html();
+  Mustache.parse(template);
+  var rendered = Mustache.render(template, {bucketlistArr});
+  $("#bucketListBody").html(rendered);
+}
 
 
 // Mustache Render Function
