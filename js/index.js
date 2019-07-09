@@ -77,24 +77,24 @@ contract Bucketlist =
     state.index_counter
 `; // sophia code
 
-const CONTRACTADDRESS = 'ct_8RLVVw93vTgGiQoSbVXuXDdhES9mBypdiFdZ7hEBTVCpeuxPw'; //contract addressed deployed
+const CONTRACTADDRESS = 'ct_24iCatQemLFrrXfahgJPQ1zDXxUtCDKwe9zu3ChCpjQpXWqHFY'; //contract addressed deployed
 var client = null; // client
 var bucketlistArr = [];  // an empty array
 var bucketlistLength  = 0; 
 
+console.log(CONTRACTADDRESS)
 
 //helper function
 async function callStatic(func, args){
   const contract = await client.getContractInstance(CONTRACTSOURCE, {CONTRACTADDRESS});
   const calledGet = await contract.call(func, args, {callStatic:true}).catch(e => console.error(e));
-  const decodedGet = await calledGet.decoded().catch(e => console.error(e));
+  const decodedGet = await calledGet.decode().catch(e => console.error(e));
   return decodedGet;
 }
 
 // loader 
 window.addEventListener('load', async() => {
   client = await Ae.Aepp(); // ae object
-
   bucketlistLength = await callStatic('get_bucket_list_length',[]);
   // cons
   console.log(bucketlistLength);
@@ -108,16 +108,12 @@ window.addEventListener('load', async() => {
   }
   renderBucketList();
 });
-
-
 function renderBucketList(){
   var template = $("#template").html();
   Mustache.parse(template);
   var rendered = Mustache.render(template, {bucketlistArr});
   $("#bucketListBody").html(rendered);
 }
-
-
 // Mustache Render Function
 
 /*
