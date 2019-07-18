@@ -1,40 +1,37 @@
 /*
-contract ToDoManager =
+contract Bucketlist =
   record state = {
     index_counter : int,
-    m_index_to_do : map(int, string),
-    m_to_do_done : map(int, bool) }
+    bucketlist : map(int, string),
+    completed : map(int, bool) }
     
-  
-  public stateful function init() =
+  public stateful entrypoint init() =
     { index_counter = 0,
-      m_index_to_do = {},
-      m_to_do_done = {}}
-  
-  public function get_task_count() : int = 
+      bucketlist = {},
+      completed = {}}
+  public entrypoint get_task_count() : int = 
     state.index_counter
-  
-  public stateful function add_to_do(_to_do : string) : string =
-    put(state{m_index_to_do[state.index_counter] = _to_do })
-    put(state{m_to_do_done[state.index_counter] = false})
+  public stateful entrypoint add_new_bucketlist(_newbucketlist : string) : string =
+    put(state{bucketlist[state.index_counter] = _newbucketlist })
+    put(state{completed[state.index_counter] = false})
     put(state{index_counter = state.index_counter + 1})
-    _to_do
+    _newbucketlist
   
-  public stateful function complete_task(_index : int) : bool =
-    put(state{m_to_do_done[_index] = true })
+  public stateful entrypoint complete_bucketlist(_index : int) : bool =
+    put(state{completed[_index] = true })
     true
-  
-  public function get_task_by_index(_index:int) : string =
-    switch(Map.lookup(_index, state.m_index_to_do))
+  public entrypoint get_bucketlist_by_index(_index:int) : string =
+    switch(Map.lookup(_index, state.bucketlist))
       None => ""
       Some(x) => x
       
-  public function task_is_completed(_index : int) : bool =
-    switch(Map.lookup(_index, state.m_to_do_done))
+  public entrypoint bucketlist_is_completed(_index : int) : bool =
+    switch(Map.lookup(_index, state.completed))
       None => false
       Some(x) => x
-    
-    
+      
+  public entrypoint get_bucket_list_length() : int = 
+    state.index_counter
 */
 
 const CONTRACTSOURCE = `
@@ -44,36 +41,32 @@ contract Bucketlist =
     bucketlist : map(int, string),
     completed : map(int, bool) }
     
-
-  public stateful function init() =
+  public stateful entrypoint init() =
     { index_counter = 0,
       bucketlist = {},
       completed = {}}
-
-  public function get_task_count() : int = 
+  public entrypoint get_task_count() : int = 
     state.index_counter
-
-  public stateful function add_new_bucketlist(_newbucketlist : string) : string =
+  public stateful entrypoint add_new_bucketlist(_newbucketlist : string) : string =
     put(state{bucketlist[state.index_counter] = _newbucketlist })
     put(state{completed[state.index_counter] = false})
     put(state{index_counter = state.index_counter + 1})
     _newbucketlist
-
-  public stateful function complete_bucketlist(_index : int) : bool =
+  
+  public stateful entrypoint complete_bucketlist(_index : int) : bool =
     put(state{completed[_index] = true })
     true
-
-  public function get_bucketlist_by_index(_index:int) : string =
+  public entrypoint get_bucketlist_by_index(_index:int) : string =
     switch(Map.lookup(_index, state.bucketlist))
       None => ""
       Some(x) => x
       
-  public function bucketlist_is_completed(_index : int) : bool =
+  public entrypoint bucketlist_is_completed(_index : int) : bool =
     switch(Map.lookup(_index, state.completed))
       None => false
       Some(x) => x
       
-  public function get_bucket_list_length() : int = 
+  public entrypoint get_bucket_list_length() : int = 
     state.index_counter
 `; // sophia code
 
