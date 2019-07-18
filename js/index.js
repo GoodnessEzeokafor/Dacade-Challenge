@@ -70,7 +70,7 @@ contract Bucketlist =
     state.index_counter
 `; // sophia code
 
-const CONTRACTADDRESS = 'ct_24iCatQemLFrrXfahgJPQ1zDXxUtCDKwe9zu3ChCpjQpXWqHFY'; //contract addressed deployed
+const CONTRACTADDRESS = 'ct_214UFu6v1772fpsaRW1bUUzGTHMivYYpQt7yt6CuTggT9164fx'; //contract addressed deployed
 var client = null; // client
 var bucketlistArr = [];  // an empty array
 var bucketlistLength  = 0; 
