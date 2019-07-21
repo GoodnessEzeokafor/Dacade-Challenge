@@ -1,96 +1,78 @@
-/*
-contract Bucketlist =
-  record state = {
-    index_counter : int,
-    bucketlist : map(int, string),
-    completed : map(int, bool) }
-    
-  public stateful entrypoint init() =
-    { index_counter = 0,
-      bucketlist = {},
-      completed = {}}
-  public entrypoint get_task_count() : int = 
-    state.index_counter
-  public stateful entrypoint add_new_bucketlist(_newbucketlist : string) : string =
-    put(state{bucketlist[state.index_counter] = _newbucketlist })
-    put(state{completed[state.index_counter] = false})
-    put(state{index_counter = state.index_counter + 1})
-    _newbucketlist
-  
-  public stateful entrypoint complete_bucketlist(_index : int) : bool =
-    put(state{completed[_index] = true })
-    true
-  public entrypoint get_bucketlist_by_index(_index:int) : string =
-    switch(Map.lookup(_index, state.bucketlist))
-      None => ""
-      Some(x) => x
+const contractSource = `
+  contract BucketList =
+    record state = {
+      index_counter : int,
+      bucketlist : map(int, string),
+      completed : map(int, bool) }
       
-  public entrypoint bucketlist_is_completed(_index : int) : bool =
-    switch(Map.lookup(_index, state.completed))
-      None => false
-      Some(x) => x
-      
-  public entrypoint get_bucket_list_length() : int = 
-    state.index_counter
-*/
+    public stateful entrypoint init() =
+      { index_counter = 0,
+        bucketlist = {},
+        completed = {}}
+    public entrypoint get_task_count() : int = 
+      state.index_counter
+    public stateful entrypoint add_new_bucketlist(_newbucketlist : string) : string =
+      put(state{bucketlist[state.index_counter] = _newbucketlist })
+      put(state{completed[state.index_counter] = false})
+      put(state{index_counter = state.index_counter + 1})
+      _newbucketlist
 
-const CONTRACTSOURCE = `
-contract Bucketlist =
-  record state = {
-    index_counter : int,
-    bucketlist : map(int, string),
-    completed : map(int, bool) }
-    
-  public stateful entrypoint init() =
-    { index_counter = 0,
-      bucketlist = {},
-      completed = {}}
-  public entrypoint get_task_count() : int = 
-    state.index_counter
-  public stateful entrypoint add_new_bucketlist(_newbucketlist : string) : string =
-    put(state{bucketlist[state.index_counter] = _newbucketlist })
-    put(state{completed[state.index_counter] = false})
-    put(state{index_counter = state.index_counter + 1})
-    _newbucketlist
-  
-  public stateful entrypoint complete_bucketlist(_index : int) : bool =
-    put(state{completed[_index] = true })
-    true
-  public entrypoint get_bucketlist_by_index(_index:int) : string =
-    switch(Map.lookup(_index, state.bucketlist))
-      None => ""
-      Some(x) => x
-      
-  public entrypoint bucketlist_is_completed(_index : int) : bool =
-    switch(Map.lookup(_index, state.completed))
-      None => false
-      Some(x) => x
-      
-  public entrypoint get_bucket_list_length() : int = 
-    state.index_counter
-`; // sophia code
+    public stateful entrypoint complete_bucketlist(_index : int) : bool =
+      put(state{completed[_index] = true })
+      true
+    public entrypoint get_bucketlist_by_index(_index:int) : string =
+      switch(Map.lookup(_index, state.bucketlist))
+        None => abort("There was no bucketlis with this index.")
+        Some(x) => x
+        
+    public entrypoint bucketlist_is_completed(_index : int) : bool =
+      switch(Map.lookup(_index, state.completed))
+        None => abort("There was no bucketlis with this index.")
+        Some(x) => x
+        
+    public entrypoint get_bucket_list_length() : int = 
+      state.index_counter
+`;
 
-const CONTRACTADDRESS = 'ct_214UFu6v1772fpsaRW1bUUzGTHMivYYpQt7yt6CuTggT9164fx'; //contract addressed deployed
-var client = null; // client
-var bucketlistArr = [];  // an empty array
+const contractAddress = 'ct_2QYJimHsxV8TkN5KDUdU4xfoFxizHDAuZ89oBewxQQ1xosZVfP';
+var client = null;
+var bucketlistArr = [];
 var bucketlistLength  = 0; 
 
-console.log(CONTRACTADDRESS)
-
-//helper function
-async function callStatic(func, args){
-  const contract = await client.getContractInstance(CONTRACTSOURCE, {CONTRACTADDRESS});
-  const calledGet = await contract.call(func, args, {callStatic:true}).catch(e => console.error(e));
+async function callStatic(func, args) {
+  const contract = await client.getContractInstance(contractSource, {contractAddress});
+  console.log('Function: ', func);
+  console.log('Argument: ', args);
+  const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
+  console.log('calledGet', calledGet);
   const decodedGet = await calledGet.decode().catch(e => console.error(e));
+
   return decodedGet;
 }
 
-// loader 
+//Create a asynchronous write call for our smart contract
+async function contractCall(func, args, value) {
+  const contract = await client.getContractInstance(contractSource, {contractAddress});
+  const calledSet = await contract.call(func, args, {amount: value}).catch(e => console.error(e));
+  return calledSet;
+}
+
+function renderBucketList(){
+  let template = $('#template').html();
+  Mustache.parse(template);
+  let rendered = Mustache.render(template, {bucketlistArr});
+  $("#bucketListBody").html(rendered);
+}
+
 window.addEventListener('load', async() => {
-  client = await Ae.Aepp(); // ae object
+  $("#loader").show();
+
+  client = await Ae.Aepp();
+
   bucketlistLength = await callStatic('get_bucket_list_length',[]);
-  // cons
-  console.log(bucketlistLength);
+  
+  console.log('BucketList Count: ', bucketlistLength);
+
   for(let i = 1; i <= bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
@@ -100,43 +82,22 @@ window.addEventListener('load', async() => {
     })
   }
   renderBucketList();
-});
-function renderBucketList(){
-  var template = $("#template").html();
-  Mustache.parse(template);
-  var rendered = Mustache.render(template, {bucketlistArr});
-  $("#bucketListBody").html(rendered);
-}
-// Mustache Render Function
 
-/*
-var mockArray = [
-  {"index_counter":0, "bucket_list":"Program Java", "Done":false},
-  {"index_counter":1, "bucket_list":"Program C++", "Done":false},
-  {"index_couner":2, "bucket_list":"Program Java", "Done":true}
-]
-
-function renderMockArray(){
-  var template = $("#template").html();
-  Mustache.parse(template);
-  var rendered = Mustache.render(template, {mockArray});
-  $("#bucketListBody").html(rendered);
-}
-
-window.addEventListener('load', async() => {
-  renderMockArray();
+  $("#loader").show();
 });
 
+//If someone clicks to register a moment, get the input and execute the registerCall
 $('#addBucketListBtn').click(async function(){
-  // console.log("Hello")
-  var bucketlist = ($('#bucketlist').val());
-  mockArray.push({
-    index_counter:mockArray.length + 1,
-    bucket_list: bucketlist,
-    Done:false
-  });
+  $("#loader").show();
+  const bucketlist = ($('#bucketlist').val());
 
-  renderMockArray();
- 
-})
-*/
+  await contractCall('registerNow', bucketlist, 0);
+
+  bucketlistArr.push({
+    index_counter: bucketlistArr + 1,
+    bucketlist: bucketlist,
+  })
+
+  renderBucketList();
+  $("#loader").hide();
+});
