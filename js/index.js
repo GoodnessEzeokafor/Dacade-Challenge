@@ -34,7 +34,7 @@ const contractSource = `
       state.index_counter
 `;
 
-const contractAddress = 'ct_2QYJimHsxV8TkN5KDUdU4xfoFxizHDAuZ89oBewxQQ1xosZVfP';
+const contractAddress = 'ct_22We6bHW79rzuYRKYVaKuGVnZzJnkP9ydmasxhATJ9gPhDtGUZ';
 var client = null;
 var bucketlistArr = [];
 var bucketlistLength  = 0; 
