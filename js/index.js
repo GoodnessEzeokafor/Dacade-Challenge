@@ -39,7 +39,8 @@ var client = null;
 var bucketlistArr = [];
 var bucketlistLength  = 0; 
 
-console.log("Contract Address:",contractAddress)
+// console.log("Contract Address:",contractAddress)
+
 async function callStatic(func, args) {
   const contract = await client.getContractInstance(contractSource, {contractAddress});
   console.log('Function: ', func);
@@ -84,12 +85,12 @@ window.addEventListener('load', async() => {
   }
   renderBucketList();
 
-  $("#loader").show();
+  // $("#loader").show();
 });
 
 //If someone clicks to register a moment, get the input and execute the registerCall
 $('#addBucketListBtn').click(async function(){
-  $("#loader").show();
+  console.log("Button Clicked")
   const bucketlist = ($('#bucketlist').val());
   console.log("Bucketlist:", bucketlist)
   await contractCall('registerNow', bucketlist, 0);
@@ -100,5 +101,4 @@ $('#addBucketListBtn').click(async function(){
   })
 
   renderBucketList();
-  $("#loader").hide();
 });
