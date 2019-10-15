@@ -41,14 +41,23 @@ var bucketlistLength  = 0;
 
 // console.log("Contract Address:",contractAddress)
 
-async function callStatic(func, args) {
-  const contract = await client.getContractInstance(contractSource, {contractAddress});
-  console.log('Function: ', func);
-  console.log('Argument: ', args);
-  const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
-  console.log('calledGet', calledGet);
-  const decodedGet = await calledGet.decode().catch(e => console.error(e));
+// async function callStatic(func, args) {
+//   const contract = await client.getContractInstance(contractSource, {contractAddress});
+//   console.log('Function: ', func);
+//   console.log('Argument: ', args);
+//   const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
+//   console.log('calledGet', calledGet);
+//   const decodedGet = await calledGet.decode().catch(e => console.error(e));
 
+//   return decodedGet;
+// }
+async function callStatic(func, args) {
+  //Create a new contract instance that we can interact with
+  const contract = await client.getContractInstance(contractSource, {contractAddress});
+  //Make a call to get data of smart contract func, with specefied arguments
+  const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
+  //Make another call to decode the data received in first call
+  const decodedGet = await calledGet.decode().catch(e => console.error(e));
   return decodedGet;
 }
 
@@ -93,7 +102,7 @@ $('#addBucketListBtn').click(async function(){
   console.log("Button Clicked")
   const bucketlist = ($('#bucketlist').val());
   console.log("Bucketlist:", bucketlist)
-  await contractCall('registerNow', bucketlist, 0);
+  // await contractCall('registerNow', bucketlist, 0);
 
   bucketlistArr.push({
     index_counter: bucketlistArr + 1,
