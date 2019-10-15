@@ -90,7 +90,7 @@ window.addEventListener('load', async() => {
 $('#addBucketListBtn').click(async function(){
   $("#loader").show();
   const bucketlist = ($('#bucketlist').val());
-
+  console.log("Bucketlist:", bucketlist)
   await contractCall('registerNow', bucketlist, 0);
 
   bucketlistArr.push({
