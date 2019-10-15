@@ -39,6 +39,7 @@ var client = null;
 var bucketlistArr = [];
 var bucketlistLength  = 0; 
 
+console.log("Contract Address:",contractAddress)
 async function callStatic(func, args) {
   const contract = await client.getContractInstance(contractSource, {contractAddress});
   console.log('Function: ', func);
