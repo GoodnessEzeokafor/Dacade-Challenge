@@ -102,7 +102,7 @@ $('#addBucketListBtn').click(async function(){
   console.log("Button Clicked")
   const bucketlist = ($('#bucketlist').val());
   console.log("Bucketlist:", bucketlist)
-  // await contractCall('registerNow', bucketlist, 0);
+  await contractCall('add_new_bucketlist', bucketlist, 0);
 
   bucketlistArr.push({
     index_counter: bucketlistArr + 1,
