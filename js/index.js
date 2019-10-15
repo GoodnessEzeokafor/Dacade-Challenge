@@ -60,14 +60,14 @@ async function callStatic(func, args) {
   const decodedGet = await calledGet.decode().catch(e => console.error(e));
   return decodedGet;
 }
-
 //Create a asynchronous write call for our smart contract
 async function contractCall(func, args, value) {
   const contract = await client.getContractInstance(contractSource, {contractAddress});
+  //Make a call to write smart contract func, with aeon value input
   const calledSet = await contract.call(func, args, {amount: value}).catch(e => console.error(e));
+
   return calledSet;
 }
-
 function renderBucketList(){
   let template = $('#template').html();
   Mustache.parse(template);
@@ -103,7 +103,7 @@ $('#addBucketListBtn').click(async function(){
   const bucketlist = ($('#bucketlist').val());
   console.log("Bucketlist:", bucketlist)
   await contractCall('add_new_bucketlist', bucketlist, 0);
-
+  
   bucketlistArr.push({
     index_counter: bucketlistArr + 1,
     bucketlist: bucketlist,
