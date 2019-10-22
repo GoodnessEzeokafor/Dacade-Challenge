@@ -1,33 +1,35 @@
 const contractSource = `
 contract BucketList =
+  record bucketlists_rec= {name:string}
+
   record state = {
     index_counter : int,
-    bucketlist : map(int, string),
-    completed : map(int, bool) }
+    bucketlist : map(int, bucketlists_rec)}
     
-  public stateful entrypoint init() =
+  stateful entrypoint init() =
     { index_counter = 0,
-      bucketlist = {},
-      completed = {}}
+      bucketlist = {} }
     
-  public stateful entrypoint add_new_bucketlist(_newbucketlist : string)=
-    put(state{bucketlist[state.index_counter] = _newbucketlist })
-    put(state{index_counter = get_bucket_list_length() + 1})
+  stateful entrypoint add_new_bucketlist(_newbucketlist : string)=
+    let bucketlists_rec ={name =_newbucketlist }
+    let index = state.index_counter + 1
+    put(state{bucketlist[index] = bucketlists_rec, index_counter=index})
 
 
       
-  public entrypoint get_bucket_list_length() : int = 
+  entrypoint get_bucket_list_length() : int = 
     state.index_counter
 
 
-  public entrypoint get_bucketlist_by_index(_index:int)=
+  entrypoint get_bucketlist_by_index(_index:int)=
     switch(Map.lookup(_index, state.bucketlist))
       None => abort("There was no bucketlis with this index.")
       Some(x) => x
+      
             
 `;
 
-const contractAddress = 'ct_JbtWSzxZrKAmXLsco47MnYsmEUbeMAC2P1tFFv97jA9LoeFx9';
+const contractAddress = 'ct_2HKuohTiT9EJ9o111z4LgDxRoCVwXzyC5dSmwEga3ASoB6npZM';
 var client = null;
 var bucketlistArr = [];
 var bucketlistLength  = 0; 
