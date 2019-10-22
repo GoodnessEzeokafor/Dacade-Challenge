@@ -27,7 +27,7 @@ contract BucketList =
             
 `;
 
-const contractAddress = 'ct_p57qip63PVQSBUh4RrtxPRLf9B8n8owazLjdN1JaAeixFKo4u';
+const contractAddress = 'ct_JbtWSzxZrKAmXLsco47MnYsmEUbeMAC2P1tFFv97jA9LoeFx9';
 var client = null;
 var bucketlistArr = [];
 var bucketlistLength  = 0; 
@@ -82,7 +82,7 @@ window.addEventListener('load', async() => {
   
   console.log('BucketList Count: ', bucketlistLength);
 
-  for(let i = 0; i <= bucketlistLength; i++){
+  for(let i = 0; i < bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
       index_counter:i,
