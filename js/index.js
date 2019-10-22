@@ -34,7 +34,7 @@ const contractSource = `
       state.index_counter
 `;
 
-const contractAddress = 'ct_2h2wvCDd9qNvbmJsmXzrAfjqyD2Qz8sZsV35Y1DF5UYSw1di4T';
+const contractAddress = 'ct_p57qip63PVQSBUh4RrtxPRLf9B8n8owazLjdN1JaAeixFKo4u';
 var client = null;
 var bucketlistArr = [];
 var bucketlistLength  = 0; 
@@ -89,7 +89,7 @@ window.addEventListener('load', async() => {
   
   console.log('BucketList Count: ', bucketlistLength);
 
-  for(let i = 1; i < bucketlistLength; i++){
+  for(let i = 1; i <= bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
       index_counter:getbucketlist.index_counter,
@@ -110,7 +110,7 @@ $('#addBucketListBtn').click(async function(){
   console.log("-------------------------------------")
   console.log("Contract Adderss", contractAddress)
   console.log("Bucketlist:", bucketlist)
-  await contractCall('add_new_bucketlist', bucketlist, 0);
+  await contractCall('add_new_bucketlist', bucketlist);
   
   bucketlistArr.push({
     index_counter: bucketlistArr + 1,
