@@ -50,28 +50,29 @@ async function callStatic(func, args) {
   //Create a new contract instance that we can interact with
   const contract = await client.getContractInstance(contractSource, {contractAddress});
   //Make a call to get data of smart contract func, with specefied arguments
-  console.log("Contract : ", contract)
+  // console.log("Contract : ", contract)
   const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
   //Make another call to decode the data received in first call
-  console.log("Called get found: ",  calledGet)
+  // console.log("Called get found: ",  calledGet)
   const decodedGet = await calledGet.decode().catch(e => console.error(e));
-  console.log("catching errors : ", decodedGet)
+  // console.log("catching errors : ", decodedGet)
   return decodedGet;
 }
 
 //Create a asynchronous write call for our smart contract
 async function contractCall(func, args, value) {
-  client = await Ae.Aepp()
-  console.log(`calling a function on a deployed contract with func: ${func}, args: ${args} and options:`, value)
-  return client.contractCall(contractAddress, 'sophia-address', contractAddress, func, { args, value })
+  // client = await Ae.Aepp()
+  // console.log(`calling a function on a deployed contract with func: ${func}, args: ${args} and options:`, value)
+  // return client.contractCall(contractAddress, 'sophia-address', contractAddress, func, { args, value })
 
   // client = await Ae.Aepp();
-  // const contract = await client.getContractInstance(contractSource, {contractAddress});
-  // //Make a call to write smart contract func, with aeon value input
-  // // const calledSet = await contract.call(func, args, {amount:value}).catch(e => console.error(e));
-  // const calledSet = await contract.contractCall(func, args, {amount:value}).catch(e => console.error(e));
-  // console.log("CalledSet", calledSet)
-  // return calledSet;
+  const contract = await client.getContractInstance(contractSource, {contractAddress});
+  console.log("Contract:", contract)
+  //Make a call to write smart contract func, with aeon value input
+  // const calledSet = await contract.call(func, args, {amount:value}).catch(e => console.error(e));
+  const calledSet = await contract.contractCall(func, args, {amount:value}).catch(e => console.error(e));
+  console.log("CalledSet", calledSet)
+  return calledSet;
 
 
 }
@@ -111,8 +112,6 @@ $('#addBucketListBtn').click(async function(){
   console.log("Button Clicked")
   const new_bucketlist = ($('#bucketlist').val());
   console.log("-------------------------------------")
-  console.log("Contract Adderss", contractAddress)
-  console.log("Bucketlist:", new_bucketlist)
   const shit = await contractCall('add_new_bucketlist', new_bucketlist);
   console.log("SAVED TO THE DB", shit)
   bucketlistArr.push({
