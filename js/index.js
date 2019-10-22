@@ -55,19 +55,24 @@ async function callStatic(func, args) {
   //Create a new contract instance that we can interact with
   const contract = await client.getContractInstance(contractSource, {contractAddress});
   //Make a call to get data of smart contract func, with specefied arguments
+  console.log("Contract : ", contract)
   const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
   //Make another call to decode the data received in first call
+  console.log("Called get found: ",  calledGet)
   const decodedGet = await calledGet.decode().catch(e => console.error(e));
+  console.log("catching errors : ", decodedGet)
   return decodedGet;
 }
+
 //Create a asynchronous write call for our smart contract
 async function contractCall(func, args, value) {
   const contract = await client.getContractInstance(contractSource, {contractAddress});
   //Make a call to write smart contract func, with aeon value input
-  const calledSet = await contract.call(func, args, {amount: value}).catch(e => console.error(e));
+  const calledSet = await contract.call(func, args, {amount:value}).catch(e => console.error(e));
 
   return calledSet;
 }
+
 function renderBucketList(){
   let template = $('#template').html();
   Mustache.parse(template);
@@ -84,7 +89,7 @@ window.addEventListener('load', async() => {
   
   console.log('BucketList Count: ', bucketlistLength);
 
-  for(let i = 1; i <= bucketlistLength; i++){
+  for(let i = 1; i < bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
       index_counter:getbucketlist.index_counter,
@@ -94,11 +99,12 @@ window.addEventListener('load', async() => {
   }
   renderBucketList();
 
-  // $("#loader").show();
+  $("#loader").hide();
 });
 
 //If someone clicks to register a moment, get the input and execute the registerCall
 $('#addBucketListBtn').click(async function(){
+  $("#loader").show();
   console.log("Button Clicked")
   const bucketlist = ($('#bucketlist').val());
   console.log("-------------------------------------")
@@ -112,4 +118,9 @@ $('#addBucketListBtn').click(async function(){
   })
 
   renderBucketList();
+  $("#loader").hide();
+
 });
+
+
+// ak_2bKhoFWgQ9os4x8CaeDTHZRGzUcSwcXYUrM12gZHKTdyreGRgG
