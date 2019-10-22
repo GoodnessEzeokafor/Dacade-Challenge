@@ -1,37 +1,30 @@
 const contractSource = `
-  contract BucketList =
-    record state = {
-      index_counter : int,
-      bucketlist : map(int, string),
-      completed : map(int, bool) }
-      
-    public stateful entrypoint init() =
-      { index_counter = 0,
-        bucketlist = {},
-        completed = {}}
-    public entrypoint get_task_count() : int = 
-      state.index_counter
-    public stateful entrypoint add_new_bucketlist(_newbucketlist : string) : string =
-      put(state{bucketlist[state.index_counter] = _newbucketlist })
-      put(state{completed[state.index_counter] = false})
-      put(state{index_counter = state.index_counter + 1})
-      _newbucketlist
+contract BucketList =
+  record state = {
+    index_counter : int,
+    bucketlist : map(int, string),
+    completed : map(int, bool) }
+    
+  public stateful entrypoint init() =
+    { index_counter = 0,
+      bucketlist = {},
+      completed = {}}
+    
+  public stateful entrypoint add_new_bucketlist(_newbucketlist : string)=
+    put(state{bucketlist[state.index_counter] = _newbucketlist })
+    put(state{index_counter = get_bucket_list_length() + 1})
 
-    public stateful entrypoint complete_bucketlist(_index : int) : bool =
-      put(state{completed[_index] = true })
-      true
-    public entrypoint get_bucketlist_by_index(_index:int) : string =
-      switch(Map.lookup(_index, state.bucketlist))
-        None => abort("There was no bucketlis with this index.")
-        Some(x) => x
-        
-    public entrypoint bucketlist_is_completed(_index : int) : bool =
-      switch(Map.lookup(_index, state.completed))
-        None => abort("There was no bucketlis with this index.")
-        Some(x) => x
-        
-    public entrypoint get_bucket_list_length() : int = 
-      state.index_counter
+
+      
+  public entrypoint get_bucket_list_length() : int = 
+    state.index_counter
+
+
+  public entrypoint get_bucketlist_by_index(_index:int)=
+    switch(Map.lookup(_index, state.bucketlist))
+      None => abort("There was no bucketlis with this index.")
+      Some(x) => x
+            
 `;
 
 const contractAddress = 'ct_p57qip63PVQSBUh4RrtxPRLf9B8n8owazLjdN1JaAeixFKo4u';
@@ -89,7 +82,7 @@ window.addEventListener('load', async() => {
   
   console.log('BucketList Count: ', bucketlistLength);
 
-  for(let i = 1; i < bucketlistLength; i++){
+  for(let i = 0; i <= bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
       index_counter:i,
@@ -110,7 +103,7 @@ $('#addBucketListBtn').click(async function(){
   console.log("-------------------------------------")
   console.log("Contract Adderss", contractAddress)
   console.log("Bucketlist:", new_bucketlist)
-  await contractCall('add_new_bucketlist', [new_bucketlist]);
+  await contractCall('add_new_bucketlist', new_bucketlist);
   
   bucketlistArr.push({
     index_counter: bucketlistLength.length + 1,
