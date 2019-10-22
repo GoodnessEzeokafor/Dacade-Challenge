@@ -89,10 +89,10 @@ window.addEventListener('load', async() => {
   
   console.log('BucketList Count: ', bucketlistLength);
 
-  for(let i = 1; i < bucketlistLength; i++){
+  for(let i = 1; i <= bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
-      index_counter:getbucketlist.index_counter + 1,
+      index_counter:i,
       bucketlist:getbucketlist.bucketlist,
       completed:getbucketlist.completed
     })
@@ -113,7 +113,7 @@ $('#addBucketListBtn').click(async function(){
   await contractCall('add_new_bucketlist', [new_bucketlist]);
   
   bucketlistArr.push({
-    index_counter: new_bucketlist.index_counter + 1,
+    index_counter: new_bucketlist.index_counter,
     bucketlist: new_bucketlist,
   })
 
