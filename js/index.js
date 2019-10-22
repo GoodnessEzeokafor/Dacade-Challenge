@@ -61,9 +61,11 @@ async function callStatic(func, args) {
 
 //Create a asynchronous write call for our smart contract
 async function contractCall(func, args, value) {
+  client = await Ae.Aepp();
   const contract = await client.getContractInstance(contractSource, {contractAddress});
   //Make a call to write smart contract func, with aeon value input
-  const calledSet = await contract.call(func, args, {amount:value}).catch(e => console.error(e));
+  // const calledSet = await contract.call(func, args, {amount:value}).catch(e => console.error(e));
+  const calledSet = await contract.contractCall(func, args, {amount:value}).catch(e => console.error(e));
   console.log("CalledSet", calledSet)
   return calledSet;
 }
@@ -105,7 +107,7 @@ $('#addBucketListBtn').click(async function(){
   console.log("-------------------------------------")
   console.log("Contract Adderss", contractAddress)
   console.log("Bucketlist:", new_bucketlist)
-  // await contractCall('add_new_bucketlist', new_bucketlist);
+  await contractCall('add_new_bucketlist', new_bucketlist);
   
   bucketlistArr.push({
     index_counter: bucketlistLength.length + 1,
