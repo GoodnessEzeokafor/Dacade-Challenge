@@ -71,8 +71,9 @@ async function contractCall(func, args, value) {
 function renderBucketList(){
   let template = $('#template').html();
   Mustache.parse(template);
-  let rendered = Mustache.render(template, {bucketlistArr});
+  var rendered = Mustache.render(template, {bucketlistArr});
   $("#bucketListBody").html(rendered);
+  console.log("Mustashe Template Display")
 }
 
 window.addEventListener('load', async() => {
@@ -88,7 +89,7 @@ window.addEventListener('load', async() => {
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
       index_counter:i,
-      bucketlist:getbucketlist,
+      bucketlist:getbucketlist.name,
     })
   }
   renderBucketList();
@@ -104,7 +105,7 @@ $('#addBucketListBtn').click(async function(){
   console.log("-------------------------------------")
   console.log("Contract Adderss", contractAddress)
   console.log("Bucketlist:", new_bucketlist)
-  await contractCall('add_new_bucketlist', new_bucketlist,0);
+  await contractCall('add_new_bucketlist', new_bucketlist);
   
   bucketlistArr.push({
     index_counter: bucketlistLength.length + 1,
