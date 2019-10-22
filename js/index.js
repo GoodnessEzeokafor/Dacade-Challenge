@@ -113,7 +113,7 @@ $('#addBucketListBtn').click(async function(){
   await contractCall('add_new_bucketlist', bucketlist);
   
   bucketlistArr.push({
-    index_counter: bucketlistArr + 1,
+    index_counter: bucketlistArr ,
     bucketlist: bucketlist,
   })
 
