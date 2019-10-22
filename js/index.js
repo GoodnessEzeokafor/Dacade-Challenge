@@ -88,7 +88,7 @@ window.addEventListener('load', async() => {
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
       index_counter:i,
-      bucketlist:getbucketlist.name,
+      bucketlist:getbucketlist,
     })
   }
   renderBucketList();
