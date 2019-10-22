@@ -92,7 +92,7 @@ window.addEventListener('load', async() => {
   for(let i = 1; i < bucketlistLength; i++){
     const getbucketlist = await callStatic('get_bucketlist_by_index', [i]);
     bucketlistArr.push({
-      index_counter:getbucketlist.index_counter,
+      index_counter:getbucketlist.index_counter + 1,
       bucketlist:getbucketlist.bucketlist,
       completed:getbucketlist.completed
     })
@@ -110,7 +110,7 @@ $('#addBucketListBtn').click(async function(){
   console.log("-------------------------------------")
   console.log("Contract Adderss", contractAddress)
   console.log("Bucketlist:", new_bucketlist)
-  await contractCall('add_new_bucketlist', new_bucketlist);
+  await contractCall('add_new_bucketlist', [new_bucketlist]);
   
   bucketlistArr.push({
     index_counter: new_bucketlist.index_counter + 1,
