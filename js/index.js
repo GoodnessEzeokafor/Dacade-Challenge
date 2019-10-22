@@ -105,11 +105,11 @@ $('#addBucketListBtn').click(async function(){
   console.log("-------------------------------------")
   console.log("Contract Adderss", contractAddress)
   console.log("Bucketlist:", new_bucketlist)
-  await contractCall('add_new_bucketlist', new_bucketlist);
+  // await contractCall('add_new_bucketlist', new_bucketlist);
   
   bucketlistArr.push({
     index_counter: bucketlistLength.length + 1,
-    bucketlist: new_bucketlist.name,
+    bucketlist: new_bucketlist,
   })
 
   renderBucketList();
