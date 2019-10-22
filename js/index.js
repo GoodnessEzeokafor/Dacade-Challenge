@@ -61,8 +61,9 @@ async function callStatic(func, args) {
 
 //Create a asynchronous write call for our smart contract
 async function contractCall(func, args, value) {
+  client = await Ae.Aepp()
   console.log(`calling a function on a deployed contract with func: ${func}, args: ${args} and options:`, value)
-  return this.client.contractCall(this.contractAddress, 'sophia-address', this.contractAddress, func, { args, value })
+  return client.contractCall(contractAddress, 'sophia-address', contractAddress, func, { args, value })
 
   // client = await Ae.Aepp();
   // const contract = await client.getContractInstance(contractSource, {contractAddress});
