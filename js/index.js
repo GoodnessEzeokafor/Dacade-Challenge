@@ -70,7 +70,7 @@ async function contractCall(func, args, value) {
   console.log("Contract:", contract)
   //Make a call to write smart contract func, with aeon value input
   // const calledSet = await contract.call(func, args, {amount:value}).catch(e => console.error(e));
-  const calledSet = await contract.contractCall(func, args, {amount:value}).catch(e => console.error(e));
+  const calledSet = await contract.call(func, args, {amount:value}).catch(e => console.error(e));
   console.log("CalledSet", calledSet)
   return calledSet;
 
