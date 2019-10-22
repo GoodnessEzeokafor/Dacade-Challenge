@@ -106,7 +106,7 @@ $('#addBucketListBtn').click(async function(){
   
   bucketlistArr.push({
     index_counter: bucketlistLength.length + 1,
-    bucketlist: new_bucketlist,
+    bucketlist: new_bucketlist.name,
   })
 
   renderBucketList();
