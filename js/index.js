@@ -120,9 +120,14 @@ $('#addBucketListBtn').click(async function(){
     bucketlist: new_bucketlist,
   })
 
+
   renderBucketList();
   $("#loader").hide();
-  e.preventDefault();
+    //This will clear the value in all scenarious
+    var input = document.getElementById("bucketlist");
+    input.value = ""
+      
+  // e.preventDefault();
 
 });
 
