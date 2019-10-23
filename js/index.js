@@ -113,7 +113,7 @@ $('#addBucketListBtn').click(async function(){
   const new_bucketlist = ($('#bucketlist').val());
   console.log("-------------------------------------")
   console.log("Val:",new_bucketlist)
-  const shit = await contractCall('add_new_bucketlist', new_bucketlist,0);
+  const shit = await contractCall('add_new_bucketlist', [new_bucketlist],0);
   console.log("SAVED TO THE DB", shit)
   bucketlistArr.push({
     index_counter: bucketlistLength.length + 1,
