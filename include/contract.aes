@@ -1,33 +1,21 @@
-contract Bucketlist =
+contract BucketList =
+  record bucketlists_rec= {name:string}
   record state = {
     index_counter : int,
-    bucketlist : map(int, string),
-    completed : map(int, bool) }
+    bucketlist : map(int, bucketlists_rec)}
     
-  public stateful entrypoint init() =
+  stateful entrypoint init() =
     { index_counter = 0,
-      bucketlist = {},
-      completed = {}}
-  public entrypoint get_task_count() : int = 
+      bucketlist = {} }
+    
+  stateful entrypoint add_new_bucketlist(_newbucketlist : string)=
+    let bucketlists_rec ={name =_newbucketlist }
+    let index = state.index_counter + 1
+    put(state{bucketlist[index] = bucketlists_rec, index_counter=index})
+      
+  entrypoint get_bucket_list_length() : int = 
     state.index_counter
-  public stateful entrypoint add_new_bucketlist(_newbucketlist : string) : string =
-    put(state{bucketlist[state.index_counter] = _newbucketlist })
-    put(state{completed[state.index_counter] = false})
-    put(state{index_counter = state.index_counter + 1})
-    _newbucketlist
-  
-  public stateful entrypoint complete_bucketlist(_index : int) : bool =
-    put(state{completed[_index] = true })
-    true
-  public entrypoint get_bucketlist_by_index(_index:int) : string =
+  entrypoint get_bucketlist_by_index(_index:int)=
     switch(Map.lookup(_index, state.bucketlist))
-      None => ""
+      None => abort("There was no bucketlis with this index.")
       Some(x) => x
-      
-  public entrypoint bucketlist_is_completed(_index : int) : bool =
-    switch(Map.lookup(_index, state.completed))
-      None => false
-      Some(x) => x
-      
-  public entrypoint get_bucket_list_length() : int = 
-    state.index_counter
